@@ -42,10 +42,10 @@ main(void)
         exit(EXIT_FAILURE);
     }
 
-    float **payoff_m = (float **)calloc(ntindakan, sizeof(float *));
+    float **payoff_m = calloc(ntindakan, sizeof **payoff_m);
     int i = 0, j = 0;
     for(i = 0; i < ntindakan; i++) {
-        payoff_m[i] = (float *)calloc(nkejadian, sizeof(float));
+        payoff_m[i] = calloc(nkejadian, sizeof *payoff_m[i]);
 
         for(j = 0; j < nkejadian; j++) {
             printf("Masukkan nilai untuk V(T%d, K%d) : ", i, j);
