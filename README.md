@@ -1,11 +1,11 @@
 # Criterion
 
-Criterion helps manager of the organization to made a decision under uncertainty environment. To take the optimal decision in environment where it's not possible to assess probabilities of certain outcomes.
+`criterion(1)` helps manager of the organization to made a decision under uncertainty environment. The environment where it's not possible to assess probabilities of certain outcomes.
 
-The examples problem that Criterion can help include capacity planning, location planning, production and service design, equipment selection, etc.
+The examples problem that `criterion(1)` can help include capacity planning, location planning, production and service design, equipment selection, etc.
 
 ## Decision Theory
-Criterion use the following approach to choose the optimal decision.
+`criterion(1)` uses the following approach to choose the optimal decision.
 
 ### Laplace Criterion
 The Laplace Criterion assume that the probability of all possible outcomes is equal. This criterion is based on [Principle of Insufficient Reason](https://en.wikipedia.org/wiki/Principle_of_indifference).
