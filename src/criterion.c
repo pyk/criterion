@@ -46,12 +46,12 @@ main(void)
      * PAYOFF_M is an array of array of float. We allocate contiguous 
      * NTINDAKAN block of memory with size SIZEOF *PAYOFF_M for each 
      * block.*/
-    float **payoff_m = calloc(nkejadian, sizeof *payoff_m);
+    float **payoff_m = calloc(ntindakan, sizeof *payoff_m);
     int i = 0, j = 0;
-    for(i = 0; i < nkejadian; i++) {
-        payoff_m[i] = calloc(ntindakan, sizeof *payoff_m[i]);
+    for(i = 0; i < ntindakan; i++) {
+        payoff_m[i] = calloc(nkejadian, sizeof *payoff_m[i]);
 
-        for(j = 0; j < ntindakan; j++) {
+        for(j = 0; j < nkejadian; j++) {
             printf("Masukkan nilai untuk V(T%d, K%d) : ", i+1, j+1);
             if(scanf("%f", &payoff_m[i][j]) != 1) {
                 printf("Exit, Pastikan input anda benar.\n");
@@ -66,28 +66,30 @@ main(void)
     printf("==                     Matriks Payoff                     ==\n");
     printf("============================================================\n");
     /* Table header */
-    for(j = 0; j < ntindakan; j++) {
+    for(j = 0; j < nkejadian; j++) {
         if(j == 0) {
-            printf("        T(%d)", j + 1);
+            printf("      K(%d)", j + 1);
         } else {
-            printf("     T(%d)", j + 1);
+            printf("     K(%d)", j + 1);
         }
 
     }
     printf("\n");
-    for(i = 0; i < nkejadian; i++) {
-        printf("K(%d) ", i + 1);
-        for(j = 0; j < ntindakan; j++) {
-            printf("%8.3f ", payoff_m[i][j]);
+    for(i = 0; i < ntindakan; i++) {
+        printf("T(%d) ", i + 1);
+        for(j = 0; j < nkejadian; j++) {
+            printf("%8.4f ", payoff_m[i][j]);
         }
         printf("\n");
     }
 
     /* deallocate the memory */
-    for(i = 0; i < nkejadian; i++) {
+    for(i = 0; i < ntindakan; i++) {
         free(payoff_m[i]);
+        payoff_m[i] = NULL;
     }
     free(payoff_m);
+    payoff_m = NULL;
 
     return EXIT_SUCCESS;
 }
