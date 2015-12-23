@@ -52,7 +52,7 @@ main(void)
         payoff_m[i] = calloc(nkejadian, sizeof *payoff_m[i]);
 
         for(j = 0; j < nkejadian; j++) {
-            printf("Masukkan nilai untuk V(T%d, K%d) : ", i+1, j+1);
+            printf("Masukkan nilai untuk V(T%d, K%d) : ", i + 1, j + 1);
             if(scanf("%f", &payoff_m[i][j]) != 1) {
                 printf("Exit, Pastikan input anda benar.\n");
                 exit(EXIT_FAILURE);
@@ -96,14 +96,15 @@ main(void)
         for(j = 0; j < nkejadian; j++) {
             tindakan_sum += payoff_m[i][j];
         }
-        tindakan_sum = (1/(float)nkejadian) * tindakan_sum;
-        printf("   * T%d: %f\n", i+1, tindakan_sum);
+        tindakan_sum = (1 / (float)nkejadian) * tindakan_sum;
+        printf("   * T%d: %f\n", i + 1, tindakan_sum);
         if(tindakan_sum > laplace_t_max) {
             laplace_t_max = tindakan_sum;
             laplace_t_max_i = i + 1;
         }
     }
     printf("   Tindakan yang dipilih = T%d\n", laplace_t_max_i);
+    printf("\n");
 
 
     /* deallocate the memory */
