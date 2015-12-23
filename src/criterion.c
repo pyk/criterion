@@ -165,13 +165,113 @@ main(void)
     printf("   Tindakan yang dipilih = T%d\n", wald_t_i);
     printf("\n");
 
+    printf("3. Kriteria Savage Minimax Regret\n");
+    printf("   Ketik 1 jika V(Ti,Kj) laba; 2 jika V(Ti, Kj) kerugian : ");
+    int savage_n = 0;
+    if(scanf("%d", &savage_n) != 1 || savage_n < 0 || savage_n > 2) {
+        printf("\nInput anda tidak valid.\n");
+        exit(EXIT_FAILURE);
+    }
+    /* create new table; copy payoff matrix */
+    float **savage_payoff = calloc(ntindakan, sizeof *savage_payoff);
+    for(i = 0; i < ntindakan; i++) {
+        savage_payoff[i] = calloc(nkejadian, sizeof *savage_payoff[i]);
+        for(j = 0; j < nkejadian; j++) {
+            savage_payoff[i][j] = payoff_m[i][j];
+        }
+    }
+    /* for benefit */
+    float savage_v_max = 0.0;
+    if(savage_n == 1) {
+        for(j = 0; j < nkejadian; j++) {
+            for(i = 0; i < ntindakan; i++) {
+                if(savage_payoff[i][j] > savage_v_max) {
+                    savage_v_max = savage_payoff[i][j];
+                }
+            }
+            for(i = 0; i < ntindakan; i++) {
+                savage_payoff[i][j] = savage_v_max - savage_payoff[i][j];
+            }
+        }
+    }
+    /* for loss */
+    float savage_v_min = 0.0;
+    if(savage_n == 2) {
+        for(j = 0; j < nkejadian; j++) {
+            for(i = 0; i < ntindakan; i++) {
+                /* set the first V(Tk, Kj) as minimum */
+                if(i == 0) {
+                    savage_v_min = savage_payoff[i][j];
+                }
+
+                if(savage_payoff[i][j] < savage_v_min) {
+                    savage_v_min = savage_payoff[i][j];
+                }
+            }
+            for(i = 0; i < ntindakan; i++) {
+                savage_payoff[i][j] -= savage_v_min;
+            }
+        }
+    }
+
+    printf("   ============================================================\n");
+    printf("   ==                  Tabel Kerugian Baru                   ==\n");
+    printf("   ============================================================\n");
+    /* Table header */
+    for(j = 0; j < nkejadian; j++) {
+        if(j == 0) {
+            printf("         K(%d)", j + 1);
+        } else {
+            printf("     K(%d)", j + 1);
+        }
+
+    }
+    printf("\n");
+    for(i = 0; i < ntindakan; i++) {
+        printf("   T(%d) ", i + 1);
+        for(j = 0; j < nkejadian; j++) {
+            printf("%8.4f ", savage_payoff[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+
+    /* Minimax for a new payoff matrix */
+    int savage_t_i = 0;
+    float s_minimax_t_min = 0.0;
+    float s_minimax_k_max = 0.0;
+    printf("   Hasil Kriteria Minimax: \n");
+    for(i = 0; i < ntindakan; i++) {
+        for(j = 0; j < nkejadian; j++) {
+            float kj = savage_payoff[i][j];
+            if(kj > s_minimax_k_max) {
+                s_minimax_k_max = kj;
+            }
+        }
+        printf("   * T%d: %f\n", i + 1, s_minimax_k_max);
+        /* set the first maximum Kj as minimum Ti */
+        if(i == 0) {
+            s_minimax_t_min = s_minimax_k_max;
+        }
+        if(s_minimax_k_max < s_minimax_t_min) {
+            s_minimax_t_min = s_minimax_k_max;
+            savage_t_i = i + 1;
+        }
+    }
+    printf("   Tindakan yang dipilih = T%d\n", savage_t_i);
+    printf("\n");
+
     /* deallocate the memory */
     for(i = 0; i < ntindakan; i++) {
         free(payoff_m[i]);
+        free(savage_payoff[i]);
         payoff_m[i] = NULL;
+        savage_payoff[i] = NULL;
     }
     free(payoff_m);
+    free(savage_payoff);
     payoff_m = NULL;
+    savage_payoff = NULL;
 
     return EXIT_SUCCESS;
 }
