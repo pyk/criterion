@@ -193,11 +193,11 @@ main(void)
             savage_payoff[i][j] = payoff_m[i][j];
         }
     }
-    /* for loss */
-    float savage_v_min = 0.0;
     for(j = 0; j < nkejadian; j++) {
-        /* for benefit; savage_v_mac should reset for each column */
+        /* savage_v_max & savage_v_min should reset for each column */
         float savage_v_max = 0.0;
+        float savage_v_min = 0.0;
+
         for(i = 0; i < ntindakan; i++) {
             if(savage_n == 1) {
                 if(savage_payoff[i][j] > savage_v_max) {
@@ -237,7 +237,6 @@ main(void)
         } else {
             printf("     K(%d)", j + 1);
         }
-
     }
     printf("\n");
     for(i = 0; i < ntindakan; i++) {
