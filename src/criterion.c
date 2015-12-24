@@ -152,7 +152,16 @@ main(void)
                 }
             }
         }
-        printf("   * T%d: %f\n", i + 1, minimax_k_max);
+        /* Minimax */
+        if(wald_n == 1) {
+            printf("   * T%d: %f\n", i + 1, minimax_k_max);
+        }
+
+        /* Maximin */
+        if(wald_n == 2) {
+            printf("   * T%d: %f\n", i + 1, maximin_k_min);
+        }
+
         if(wald_n == 1) {
             /* set the first maximum Kj as minimum Ti */
             if(i == 0) {
