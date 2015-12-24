@@ -117,17 +117,43 @@ main(void)
     /* Minimax 
      * We choose the maximum of Kj and the minimum of Ti */
     float minimax_t_min = 0.0;
-    float minimax_k_max = 0.0;
+    /* Maximin 
+     * We choose the minimum of Kj and the maximum of Ti */
+    float maximin_t_max = 0.0;
+    float maximin_k_min = 0.0;
+    /* Minimax */
     if(wald_n == 1) {
         printf("   Minimax terpilih\n");
-        for(i = 0; i < ntindakan; i++) {
-            for(j = 0; j < nkejadian; j++) {
-                float kj = payoff_m[i][j];
+    }
+    /* Maximin */
+    if(wald_n == 2) {
+        printf("   Maximin terpilih\n");
+    }
+    for(i = 0; i < ntindakan; i++) {
+        /* Minimax; Kmax should reset for each row */
+        float minimax_k_max = 0.0;
+
+        for(j = 0; j < nkejadian; j++) {
+            float kj = payoff_m[i][j];
+
+            if(wald_n == 1) {
                 if(kj > minimax_k_max) {
                     minimax_k_max = kj;
                 }
             }
-            printf("   * T%d: %f\n", i + 1, minimax_k_max);
+
+            if(wald_n == 2) {
+                /* set the first Kj in one row as a minimum */
+                if(j == 0) {
+                    maximin_k_min = kj;
+                }
+                if(kj < maximin_k_min) {
+                    maximin_k_min = kj;
+                }
+            }
+        }
+        printf("   * T%d: %f\n", i + 1, minimax_k_max);
+        if(wald_n == 1) {
             /* set the first maximum Kj as minimum Ti */
             if(i == 0) {
                 minimax_t_min = minimax_k_max;
@@ -137,31 +163,15 @@ main(void)
                 wald_t_i = i + 1;
             }
         }
-    }
-    /* Maximin 
-     * We choose the minimum of Kj and the maximum of Ti */
-    float maximin_t_max = 0.0;
-    float maximin_k_min = 0.0;
-    if(wald_n == 2) {
-        printf("   Maximin terpilih\n");
-        for(i = 0; i < ntindakan; i++) {
-            for(j = 0; j < nkejadian; j++) {
-                float kj = payoff_m[i][j];
-                /* set the first Kj in one row as a minimum */
-                if(j == 0) {
-                    maximin_k_min = kj;
-                }
-                if(kj < maximin_k_min) {
-                    maximin_k_min = kj;
-                }
-            }
-            printf("   * T%d: %f\n", i + 1, maximin_k_min);
+
+        if(wald_n == 2) { 
             if(maximin_k_min > maximin_t_max) {
                 maximin_t_max = maximin_k_min;
                 wald_t_i = i + 1;
             }
         }
     }
+        
     printf("   Tindakan yang dipilih = T%d\n", wald_t_i);
     printf("\n");
 
@@ -239,9 +249,10 @@ main(void)
     /* Minimax for a new payoff matrix */
     int savage_t_i = 0;
     float s_minimax_t_min = 0.0;
-    float s_minimax_k_max = 0.0;
     printf("   Hasil Kriteria Minimax: \n");
     for(i = 0; i < ntindakan; i++) {
+        float s_minimax_k_max = 0.0;
+
         for(j = 0; j < nkejadian; j++) {
             float kj = savage_payoff[i][j];
             if(kj > s_minimax_k_max) {
