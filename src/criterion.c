@@ -199,25 +199,19 @@ main(void)
             savage_payoff[i][j] = payoff_m[i][j];
         }
     }
-    /* for benefit */
-    float savage_v_max = 0.0;
-    if(savage_n == 1) {
-        for(j = 0; j < nkejadian; j++) {
-            for(i = 0; i < ntindakan; i++) {
+    /* for loss */
+    float savage_v_min = 0.0;
+    for(j = 0; j < nkejadian; j++) {
+        /* for benefit; savage_v_mac should reset for each column */
+        float savage_v_max = 0.0;
+        for(i = 0; i < ntindakan; i++) {
+            if(savage_n == 1) {
                 if(savage_payoff[i][j] > savage_v_max) {
                     savage_v_max = savage_payoff[i][j];
                 }
             }
-            for(i = 0; i < ntindakan; i++) {
-                savage_payoff[i][j] = savage_v_max - savage_payoff[i][j];
-            }
-        }
-    }
-    /* for loss */
-    float savage_v_min = 0.0;
-    if(savage_n == 2) {
-        for(j = 0; j < nkejadian; j++) {
-            for(i = 0; i < ntindakan; i++) {
+
+            if(savage_n == 2) {
                 /* set the first V(Tk, Kj) as minimum */
                 if(i == 0) {
                     savage_v_min = savage_payoff[i][j];
@@ -227,12 +221,18 @@ main(void)
                     savage_v_min = savage_payoff[i][j];
                 }
             }
-            for(i = 0; i < ntindakan; i++) {
+        }
+        for(i = 0; i < ntindakan; i++) {
+            if(savage_n == 1) {
+                savage_payoff[i][j] = savage_v_max - savage_payoff[i][j];
+            }
+
+            if(savage_n == 2) {
                 savage_payoff[i][j] -= savage_v_min;
             }
         }
     }
-
+                
     printf("   ============================================================\n");
     printf("   ==                  Tabel Kerugian Baru                   ==\n");
     printf("   ============================================================\n");
