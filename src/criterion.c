@@ -107,7 +107,7 @@ main(void)
     printf("\n");
 
     printf("2. Kriteria Wald\n");
-    printf("   Ketik 1 untuk Minimax 2 untuk Maximin : ");
+    printf("   Ketik 1 untuk Maximin 2 untuk Minimax : ");
     int wald_n = 0;
     int wald_t_i = 0;           /* Ti choosed */
     if(scanf("%d", &wald_n) != 1 || wald_n < 0 || wald_n > 2) {
@@ -120,29 +120,23 @@ main(void)
     /* Maximin 
      * We choose the minimum of Kj and the maximum of Ti */
     float maximin_t_max = 0.0;
-    float maximin_k_min = 0.0;
-    /* Minimax */
-    if(wald_n == 1) {
-        printf("   Minimax terpilih\n");
-    }
     /* Maximin */
-    if(wald_n == 2) {
+    if(wald_n == 1) {
         printf("   Maximin terpilih\n");
     }
+    /* Minimax */
+    if(wald_n == 2) {
+        printf("   Minimax terpilih\n");
+    }
     for(i = 0; i < ntindakan; i++) {
-        /* Minimax; Kmax should reset for each row */
+        /* Kmax & Kmin should reset for each row */
         float minimax_k_max = 0.0;
+        float maximin_k_min = 0.0;
 
         for(j = 0; j < nkejadian; j++) {
             float kj = payoff_m[i][j];
 
             if(wald_n == 1) {
-                if(kj > minimax_k_max) {
-                    minimax_k_max = kj;
-                }
-            }
-
-            if(wald_n == 2) {
                 /* set the first Kj in one row as a minimum */
                 if(j == 0) {
                     maximin_k_min = kj;
@@ -151,31 +145,32 @@ main(void)
                     maximin_k_min = kj;
                 }
             }
-        }
-        /* Minimax */
-        if(wald_n == 1) {
-            printf("   * T%d: %f\n", i + 1, minimax_k_max);
+
+            if(wald_n == 2) {
+                if(kj > minimax_k_max) {
+                    minimax_k_max = kj;
+                }
+            }
         }
 
         /* Maximin */
-        if(wald_n == 2) {
+        if(wald_n == 1) {
             printf("   * T%d: %f\n", i + 1, maximin_k_min);
+            if(maximin_k_min > maximin_t_max) {
+                maximin_t_max = maximin_k_min;
+                wald_t_i = i + 1;
+            }
         }
 
-        if(wald_n == 1) {
+        /* Minimax */
+        if(wald_n == 2) {
+            printf("   * T%d: %f\n", i + 1, minimax_k_max);
             /* set the first maximum Kj as minimum Ti */
             if(i == 0) {
                 minimax_t_min = minimax_k_max;
             }
             if(minimax_k_max < minimax_t_min) {
                 minimax_t_min = minimax_k_max;
-                wald_t_i = i + 1;
-            }
-        }
-
-        if(wald_n == 2) {
-            if(maximin_k_min > maximin_t_max) {
-                maximin_t_max = maximin_k_min;
                 wald_t_i = i + 1;
             }
         }
