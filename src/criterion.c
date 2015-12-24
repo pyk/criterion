@@ -52,7 +52,7 @@ main(void)
         payoff_m[i] = calloc(nkejadian, sizeof *payoff_m[i]);
 
         for(j = 0; j < nkejadian; j++) {
-            printf("Masukkan nilai untuk V(T%d, K%d) : ", i + 1, j + 1);
+            printf("Masukkan nilai untuk V(T%d, K%d)       : ", i + 1, j + 1);
             if(scanf("%f", &payoff_m[i][j]) != 1) {
                 printf("Exit, Pastikan input anda benar.\n");
                 exit(EXIT_FAILURE);
@@ -173,14 +173,13 @@ main(void)
             }
         }
 
-        if(wald_n == 2) { 
+        if(wald_n == 2) {
             if(maximin_k_min > maximin_t_max) {
                 maximin_t_max = maximin_k_min;
                 wald_t_i = i + 1;
             }
         }
     }
-        
     printf("   Tindakan yang dipilih = T%d\n", wald_t_i);
     printf("\n");
 
@@ -232,10 +231,10 @@ main(void)
             }
         }
     }
-                
-    printf("   ============================================================\n");
-    printf("   ==                  Tabel Kerugian Baru                   ==\n");
-    printf("   ============================================================\n");
+
+    printf("   =========================================================\n");
+    printf("   ==                 Tabel Kerugian Baru                 ==\n");
+    printf("   =========================================================\n");
     /* Table header */
     for(j = 0; j < nkejadian; j++) {
         if(j == 0) {
