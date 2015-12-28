@@ -235,28 +235,25 @@ main(void)
         float savage_v_min = 0.0;
 
         for(i = 0; i < ntindakan; i++) {
-            if(savage_n == 1) {
-                if(savage_payoff[i][j] > savage_v_max) {
-                    savage_v_max = savage_payoff[i][j];
-                }
+            /* set the first V(Tk, Kj) as default value */
+            if(i == 0) {
+                savage_v_max = savage_payoff[i][j];
+                savage_v_min = savage_payoff[i][j];
             }
 
-            if(savage_n == 2) {
-                /* set the first V(Tk, Kj) as minimum */
-                if(i == 0) {
-                    savage_v_min = savage_payoff[i][j];
-                }
+            if(savage_payoff[i][j] > savage_v_max) {
+                savage_v_max = savage_payoff[i][j];
+            }
 
-                if(savage_payoff[i][j] < savage_v_min) {
-                    savage_v_min = savage_payoff[i][j];
-                }
+            if(savage_payoff[i][j] < savage_v_min) {
+                savage_v_min = savage_payoff[i][j];
             }
         }
+
         for(i = 0; i < ntindakan; i++) {
             if(savage_n == 1) {
                 savage_payoff[i][j] = savage_v_max - savage_payoff[i][j];
             }
-
             if(savage_n == 2) {
                 savage_payoff[i][j] -= savage_v_min;
             }
