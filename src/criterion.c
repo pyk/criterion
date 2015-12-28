@@ -172,22 +172,26 @@ main(void)
 
         for(j = 0; j < nkejadian; j++) {
             float kj = payoff_m[i][j];
-
-            if(wald_n == 1) {
-                /* set the first Kj in one row as a minimum */
-                if(j == 0) {
-                    maximin_k_min = kj;
-                }
-                if(kj < maximin_k_min) {
-                    maximin_k_min = kj;
-                }
+         
+            /* set the first Kj in a row as default value */
+            if(j == 0) {
+                maximin_k_min = kj;
+                minimax_k_max = kj;
             }
 
-            if(wald_n == 2) {
-                if(kj > minimax_k_max) {
-                    minimax_k_max = kj;
-                }
+            if(kj < maximin_k_min) {
+                maximin_k_min = kj;
             }
+
+            if(kj > minimax_k_max) {
+                minimax_k_max = kj;
+            }
+        }
+
+        /* set the first value */
+        if(i == 0) {
+            maximin_t_max = maximin_k_min;
+            minimax_t_min = minimax_k_max;
         }
 
         /* Maximin */
@@ -198,14 +202,9 @@ main(void)
                 wald_t_i = i + 1;
             }
         }
-
         /* Minimax */
         if(wald_n == 2) {
             printf("   * T%d: %f\n", i + 1, minimax_k_max);
-            /* set the first maximum Kj as minimum Ti */
-            if(i == 0) {
-                minimax_t_min = minimax_k_max;
-            }
             if(minimax_k_max < minimax_t_min) {
                 minimax_t_min = minimax_k_max;
                 wald_t_i = i + 1;
