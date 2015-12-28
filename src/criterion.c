@@ -297,8 +297,10 @@ main(void)
 
         for(j = 0; j < nkejadian; j++) {
             float kj = payoff_m[i][j];
+            /* Reset value for each row */
             if(j == 0) {
                 hrw_min = kj;
+                hrw_max = kj;
             }
             if(kj > hrw_max) {
                 hrw_max = kj;
