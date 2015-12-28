@@ -89,21 +89,58 @@ main(void)
     printf("============================================================\n");
 
     printf("1. Kriteria Laplace\n");
-    float laplace_t_max = 0.0;
-    int laplace_t_max_i = 0;
+    printf("   Ketik 1 untuk Maximum 2 untuk Minimum : ");
+    int lp_n = 0;
+    if(scanf("%d", &lp_n) != 1 || lp_n < 0 || lp_n > 2) {
+        printf("\nInput anda tidak valid.\n");
+        exit(EXIT_FAILURE);
+    }
+    printf("%d\n", lp_n);
+    /* Maximum */
+    if(lp_n == 1) {
+        printf("   Maximum terpilih\n");
+    }
+    /* Minimum */
+    if(lp_n == 2) {
+        printf("   Minimum terpilih\n");
+    }
+
+    /* for maximum */
+    float lp_t_max = 0.0;
+    int lp_t_max_i = 0;
+    /* for minimum */
+    float lp_t_min = 0.0;
+    int lp_t_min_i = 0;
     for(i = 0; i < ntindakan; i++) {
         float tindakan_sum = 0.0;
         for(j = 0; j < nkejadian; j++) {
             tindakan_sum += payoff_m[i][j];
         }
+        /* set as the first row value; this
+         * will handle negative values */
+        if(i == 0) {
+            lp_t_max = tindakan_sum;
+            lp_t_min = tindakan_sum;
+        }
+
         tindakan_sum = (1 / (float)nkejadian) * tindakan_sum;
         printf("   * T%d: %f\n", i + 1, tindakan_sum);
-        if(tindakan_sum > laplace_t_max) {
-            laplace_t_max = tindakan_sum;
-            laplace_t_max_i = i + 1;
+        if(tindakan_sum > lp_t_max) {
+            lp_t_max = tindakan_sum;
+            lp_t_max_i = i + 1;
+        }
+        if(tindakan_sum < lp_t_min) {
+            lp_t_min = tindakan_sum;
+            lp_t_min_i = i + 1;
         }
     }
-    printf("   Tindakan yang dipilih = T%d\n", laplace_t_max_i);
+
+    if(lp_n == 1) {
+        printf("   Tindakan yang dipilih = T%d\n", lp_t_max_i);
+    }
+    if(lp_n == 2) {
+        printf("   Tindakan yang dipilih = T%d\n", lp_t_min_i);
+    }
     printf("\n");
 
     printf("2. Kriteria Wald\n");
