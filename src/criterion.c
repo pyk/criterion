@@ -311,18 +311,21 @@ main(void)
     printf("   Ketik 1 jika V(Ti,Kj) laba; 2 jika V(Ti, Kj) biaya : ");
     int hrw_n = 0;
     int hrw_t_i = 0;
-    if(scanf("%d", &hrw_n) != 1 || hrw_n < 0 || hrw_n > 2) {
+    if(scanf("%d", &hrw_n) != 1 || hrw_n <= 0 || hrw_n > 2) {
         printf("\nInput anda tidak valid.\n");
         exit(EXIT_FAILURE);
     }
+    printf("%d\n", hrw_n);
     printf("   Masukkan nilai indeks optimisme : ");
     float hrw_io = 0;
     if(scanf("%f", &hrw_io) != 1 || hrw_io < 0.0 || hrw_io > 1.0) {
         printf("\nInput anda tidak valid.\n");
         exit(EXIT_FAILURE);
     }
+    printf("%8.4f\n", hrw_io);
     printf("         Max     Min     Expected Value\n");
     float hrw_v_max = 0.0;
+    float hrw_v_min = 0.0;
     for(i = 0; i < ntindakan; i++) {
         float hrw_max = 0.0;
         float hrw_min = 0.0;
@@ -342,20 +345,30 @@ main(void)
                 hrw_min = kj;
             }
         }
+
         /* profit */
         if(hrw_n == 1) {
             hrw_v = (hrw_io * hrw_max) + (1.0 - hrw_io) * hrw_min;
-        }
+            if(i == 0) {
+                hrw_v_max = hrw_v;
+            }
+            if(hrw_v > hrw_v_max) {
+                hrw_v_max = hrw_v;
+                hrw_t_i = i + 1;
+            }
+        }   
         /* loss */
         if(hrw_n == 2) {
             hrw_v = (hrw_io * hrw_min) + (1.0 - hrw_io) * hrw_max;
+            if(i == 0) {
+                hrw_v_min = hrw_v;
+            }
+            if(hrw_v < hrw_v_min) {
+                hrw_v_min = hrw_v;
+                hrw_t_i = i + 1;
+            }
         }
-        printf("   T(%d) %8.4f %8.4f %8.4f\n", i, hrw_max, hrw_min, hrw_v);
-
-        if(hrw_v > hrw_v_max) {
-            hrw_v_max = hrw_v;
-            hrw_t_i = i + 1;
-        }
+        printf("   T(%d) %8.4f %8.4f %8.4f\n", i+1, hrw_max, hrw_min, hrw_v);
     }
     printf("   Tindakan yang dipilih = T%d\n", hrw_t_i);
     printf("\n");
